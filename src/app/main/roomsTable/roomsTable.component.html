@@ -1,0 +1,47 @@
+<div>
+  <form [formGroup]="form" (submit)="applyDateFilter()">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Дата заезда"
+        [matDatepicker]="pickerStart"
+        formControlName="startDate"
+        required
+        (click)="pickerStart.open()"
+      >
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Дата выезда"
+        [matDatepicker]="pickerEnd"
+        formControlName="endDate"
+        required
+        (click)="pickerEnd.open()"
+      >
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+    <button
+      (click)="applyDateFilter()"
+      [disabled]="form.invalid">
+        Найти
+    </button>
+  </form>
+
+    <table mat-table [dataSource]="rooms" matSort matSortActive="{{defaultSortingHeader}}" matSortDirection="asc">
+      <ng-container *ngFor = "let column of headers" matColumnDef="{{column.value}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="sortingHeaders.indexOf(column.value) === -1"> {{column.name}} </th>
+        <td mat-cell *matCellDef="let row">
+          {{column.value === priceColumnValue ? row[column.value] + '$' : row[column.value]}}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedHeaders"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedHeaders;" (click)="openModal(row)"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+</div>
